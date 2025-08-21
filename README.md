@@ -4,6 +4,8 @@ A minimal React Router project with bknd & Cloudflare integration. Note that add
 
 This project uses Vite's Environment API, therefore bknd types generation does not work (yet).
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/bknd-io/bknd-react-router-cloudflare-template)
+
 ## Project Structure
 
 Inside of your React Router project, you'll see the following folders and files:
