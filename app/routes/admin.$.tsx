@@ -1,10 +1,7 @@
 import { lazy, Suspense, useSyncExternalStore } from "react";
 import { type LoaderFunctionArgs, useLoaderData } from "react-router";
 
-const Admin = lazy(() =>
-   import("bknd/ui").then((mod) => ({ default: mod.Admin }))
-);
-import "bknd/dist/styles.css";
+const Admin = lazy(() => import("~/components/Admin.client"));
 
 export const loader = async (args: LoaderFunctionArgs) => {
    const api = args.context.bknd.api;

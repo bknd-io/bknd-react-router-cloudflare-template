@@ -19,21 +19,20 @@ export default {
       connection: d1({
          binding: env.DB,
       }),
-   }),
-   mode: "fresh",
-
-   // an initial config is only applied if the database is empty
-   initialConfig: {
-      data: schema.toJSON(),
-      // we're enabling auth ...
-      auth: {
-         enabled: true,
-         jwt: {
-            issuer: "bknd-remix-example",
-            secret: secureRandomString(64),
+      // an initial config is only applied if the database is empty
+      initialConfig: {
+         data: schema.toJSON(),
+         // we're enabling auth ...
+         auth: {
+            enabled: true,
+            jwt: {
+               issuer: "bknd-remix-example",
+               secret: env.SECRET ?? secureRandomString(64),
+            },
          },
       },
-   },
+   }),
+   mode: "warm",
    options: {
       plugins: [
          syncTypes({

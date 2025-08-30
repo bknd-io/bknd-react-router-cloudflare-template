@@ -13,4 +13,7 @@ export default defineConfig({
       reactRouter(),
       tsconfigPaths(),
    ],
+   build: {
+      minify: true,
+   },
 });
