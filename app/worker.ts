@@ -2,7 +2,7 @@ import type { App } from "bknd";
 import { getFresh } from "bknd/adapter/cloudflare";
 import type { Api } from "bknd/client";
 import { createRequestHandler } from "react-router";
-import config from "../bknd.config";
+import config from "../config";
 
 declare module "react-router" {
    export interface AppLoadContext {
