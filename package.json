@@ -6,11 +6,10 @@
       "dev": "react-router dev",
       "build": "react-router build",
       "preview": "npm run build && vite preview",
-      "deploy": "npm run build && wrangler deploy",
+      "deploy": "wrangler deploy",
       "cf-typegen": "wrangler types",
       "bknd": "PROXY=1 npx tsx node_modules/.bin/bknd",
       "typegen": "npm run cf-typegen && react-router typegen",
-      "postinstall": "npm run typegen",
       "predev": "npm run typegen",
       "typecheck": "npm run typegen && tsc"
    },
