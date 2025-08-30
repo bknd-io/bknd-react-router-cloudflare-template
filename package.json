@@ -9,8 +9,7 @@
       "deploy": "npm run build && wrangler deploy",
       "cf-typegen": "wrangler types",
       "bknd": "PROXY=1 npx tsx node_modules/.bin/bknd",
-      "bknd-typegen": "npm run bknd types",
-      "typegen": "npm run cf-typegen && npm run bknd-typegen && react-router typegen",
+      "typegen": "npm run cf-typegen && react-router typegen",
       "postinstall": "npm run typegen",
       "predev": "npm run typegen",
       "typecheck": "npm run typegen && tsc"
