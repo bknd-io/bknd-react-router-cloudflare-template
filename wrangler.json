@@ -1,10 +1,11 @@
 {
    "$schema": "node_modules/wrangler/config-schema.json",
    "name": "bknd-react-router-cloudflare",
-   "compatibility_date": "2025-04-04",
+   "compatibility_date": "2025-08-03",
    "compatibility_flags": ["nodejs_compat"],
    "main": "./app/worker.ts",
    "vars": {
+      "ENVIRONMENT": "development",
       "SECRET": "change-me"
    },
    "d1_databases": [
@@ -19,5 +20,25 @@
          "binding": "BUCKET",
          "bucket_name": "bucket"
       }
-   ]
+   ],
+   "env": {
+      "production": {
+         "vars": {
+            "ENVIRONMENT": "production"
+         },
+         "d1_databases": [
+            {
+               "binding": "DB",
+               "database_name": "database",
+               "database_id": "00000000-0000-0000-0000-000000000000"
+            }
+         ],
+         "r2_buckets": [
+            {
+               "binding": "BUCKET",
+               "bucket_name": "bucket"
+            }
+         ]
+      }
+   }
 }

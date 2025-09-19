@@ -12,5 +12,3 @@
 /public/uploads/*
 .history
 .wrangler
-
-bknd-types.d.ts
