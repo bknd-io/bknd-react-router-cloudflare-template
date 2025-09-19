@@ -1,64 +1,56 @@
-import { boolean, em, entity, text } from "bknd";
-import { secureRandomString } from "bknd/utils";
-import {
-   d1,
-   devFsWrite,
-   type CloudflareBkndConfig,
-} from "bknd/adapter/cloudflare";
-import { syncTypes } from "bknd/plugins";
+import { devFsWrite, type CloudflareBkndConfig } from "bknd/adapter/cloudflare";
+import { syncConfig, syncSecrets, syncTypes } from "bknd/plugins";
 
-const schema = em({
-   todos: entity("todos", {
-      title: text(),
-      done: boolean(),
-   }),
-});
+// @ts-ignore prettier-ignore
+import appConfig from "./appconfig.json" with { type: "json" };
 
 export default {
-   app: (env) => ({
-      connection: d1({
-         binding: env.DB,
-      }),
-      // an initial config is only applied if the database is empty
-      initialConfig: {
-         data: schema.toJSON(),
-         // we're enabling auth ...
-         auth: {
-            enabled: true,
-            jwt: {
-               issuer: "bknd-remix-example",
-               secret: env.SECRET ?? secureRandomString(64),
+   app: (env) => {
+      // make sure to have `ENVIRONMENT` set, to determine the mode
+      const prod = env.ENVIRONMENT !== "development";
+      return {
+         // in production mode, we use the appconfig.json file as static config
+         // in development, we use it as initial config
+         config: appConfig as any,
+         options: {
+            // switch between code and db mode based on the environment
+            mode: prod ? "code" : "db",
+            manager: {
+               // injecting the secrets from the environment
+               // this is specifically required for the production mode
+               // make sure to have all secrets properly set in the environment
+               secrets: env,
             },
+            plugins: [
+               syncConfig({
+                  enabled: !prod,
+                  write: async (config) => {
+                     await devFsWrite(
+                        "appconfig.json",
+                        JSON.stringify(config, null, 2)
+                     );
+                  },
+               }),
+               syncTypes({
+                  enabled: !prod,
+                  write: async (et) => {
+                     await devFsWrite("bknd-types.d.ts", et.toString());
+                  },
+               }),
+               // sync an .env.example file (template without secrets)
+               syncSecrets({
+                  enabled: !prod,
+                  write: async (secrets) => {
+                     await devFsWrite(
+                        ".env.example",
+                        Object.entries(secrets)
+                           .map(([key, value]) => `${key}=${value}`)
+                           .join("\n")
+                     );
+                  },
+               }),
+            ],
          },
-      },
-   }),
-   mode: "warm",
-   options: {
-      plugins: [
-         syncTypes({
-            write: async (et) => {
-               try {
-                  await devFsWrite("bknd-types.d.ts", et.toString());
-               } catch (error) {
-                  console.error("-- error types error", String(error));
-               }
-            },
-         }),
-      ],
-
-      // the seed option is only executed if the database was empty
-      seed: async (ctx) => {
-         // create some entries
-         await ctx.em.mutator("todos").insertMany([
-            { title: "Learn bknd", done: true },
-            { title: "Build something cool", done: false },
-         ]);
-
-         // and create a user
-         await ctx.app.module.auth.createUser({
-            email: "test@bknd.io",
-            password: "12345678",
-         });
-      },
+      };
    },
 } satisfies CloudflareBkndConfig<Env>;

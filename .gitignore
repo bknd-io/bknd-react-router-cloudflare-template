@@ -14,3 +14,4 @@
 .wrangler
 
 bknd-types.d.ts
+worker-configuration.d.ts
