@@ -14,8 +14,7 @@
       "bknd:config": "npm run bknd -- config --pretty --out appconfig.json",
       "bknd:secrets": "npm run bknd -- secrets --format env --template --out .env.example",
       "typegen": "npm run cf-typegen && react-router typegen && npm run bknd:types",
-      "typecheck": "npm run typegen && tsc",
-      "postinstall": "npm run bknd -- config --pretty --default --out appconfig.json && npm run typegen && npm run bknd:secrets"
+      "typecheck": "npm run typegen && tsc"
    },
    "dependencies": {
       "@react-router/fs-routes": "^7.8.0",
